@@ -1,0 +1,37 @@
+name: api-backbone
+services:
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - "d:/data/redis:/data"
+    mem_limit: 256m
+
+  azurite:
+    container_name: azurite
+    image: mcr.microsoft.com/azure-storage/azurite
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    volumes:
+      - "d:/data/azurite:/data"
+    mem_limit: 1024m
+
+  sqlserver:
+    container_name: sqlserver
+    build:
+      dockerfile: sqlserver-fulltext.Dockerfile
+    ports:
+      - "1438:1433"
+    volumes:
+      - "d:/data/sql2019/data:/var/opt/mssql/data"
+      - "d:/data/sql2019/log:/var/opt/mssql/log"
+      - "d:/data/sql2019/secrets:/var/opt/mssql/secrets"
+    environment:
+      SA_PASSWORD: "ChangeMe"
+      ACCEPT_EULA: "Y"
+    mem_limit: 4096m
